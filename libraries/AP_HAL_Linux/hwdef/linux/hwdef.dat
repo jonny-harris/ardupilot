@@ -1,8 +1,33 @@
-# hwdef for generic Linux configuration option, eg. running on your laptop
+# Enable CAN support
+define HAL_CAN_ENABLE 1
 
+# Number of CAN buses
+define HAL_CAN_NUM_BUSES 1
+
+# CAN bus interface names (Linux network interfaces)
+define HAL_CAN_BUS0_DEVICE "vcan0"
+
+# Disable IMU, inertial sensors, barometers, compasses
+define HAL_INS_DEFAULT HAL_INS_NONE
+define INS_ENABLE_MASK 0
+define AP_INERTIAL_SENSOR_NONE 1
+define HAL_BARO_ALLOW_INIT_NO_BARO 1
+define HAL_COMPASS_NONE 1
+
+# Enable RC input on Jetson UART1 (ttyTHS0 = 40-pin header J11)
+define HAL_RC_INPUT_TYPE RC_SERIAL
+define HAL_RC_SERIAL_DEVICE "/dev/ttyTHS0"
+define HAL_RC_SERIAL_BAUD 115200
+
+# Enable GPS (keep GPS sensors active)
+define HAL_GPS_DEFAULT HAL_GPS_ENABLED
+
+# Enable proximity sensors (if applicable)
+define HAL_PROXIMITY_ENABLED 1
+
+# Linux environment setup
 env TOOLCHAIN native
 
 define HAL_BOARD_LOG_DIRECTORY "logs"
 define HAL_BOARD_TERRAIN_DIRECTORY "terrain"
 define HAL_BOARD_STORAGE_DIRECTORY "."
-define HAL_INS_DEFAULT HAL_INS_NONE

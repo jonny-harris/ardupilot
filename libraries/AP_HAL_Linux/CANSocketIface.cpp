@@ -52,7 +52,7 @@ using namespace Linux;
 #define Debug(fmt, args...)
 #endif
 
-static can_frame makeSocketCanFrame(const AP_HAL::CANFrame& uavcan_frame)
+/*static can_frame makeSocketCanFrame(const AP_HAL::CANFrame& uavcan_frame)
 {
     can_frame sockcan_frame { uavcan_frame.id& AP_HAL::CANFrame::MaskExtID, uavcan_frame.dlc, { } };
     std::copy(uavcan_frame.data, uavcan_frame.data + uavcan_frame.dlc, sockcan_frame.data);
@@ -67,6 +67,38 @@ static can_frame makeSocketCanFrame(const AP_HAL::CANFrame& uavcan_frame)
     }
     return sockcan_frame;
 }
+*/
+
+static can_frame makeSocketCanFrame(const AP_HAL::CANFrame& uavcan_frame)
+{
+    // Clamp DLC to max 8 bytes for classic CAN frame
+    size_t dlc = uavcan_frame.dlc;
+    if (dlc > 8) {
+        dlc = 8;
+        // Optional: log a warning here if needed
+    }
+
+    // Initialize can_frame with masked ID and clamped DLC
+    can_frame sockcan_frame { static_cast<__u32>(uavcan_frame.id & AP_HAL::CANFrame::MaskExtID),
+                              static_cast<__u8>(dlc), { 0 } };
+
+    // Copy up to dlc bytes safely into sockcan_frame.data
+    std::copy(uavcan_frame.data, uavcan_frame.data + dlc, sockcan_frame.data);
+
+    // Set CAN ID flags as needed
+    if (uavcan_frame.isExtended()) {
+        sockcan_frame.can_id |= CAN_EFF_FLAG;
+    }
+    if (uavcan_frame.isErrorFrame()) {
+        sockcan_frame.can_id |= CAN_ERR_FLAG;
+    }
+    if (uavcan_frame.isRemoteTransmissionRequest()) {
+        sockcan_frame.can_id |= CAN_RTR_FLAG;
+    }
+
+    return sockcan_frame;
+}
+
 
 static AP_HAL::CANFrame makeUavcanFrame(const can_frame& sockcan_frame)
 {
