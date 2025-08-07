@@ -2,17 +2,17 @@
 define HAL_CAN_ENABLE 1
 
 # Number of CAN buses
-define HAL_CAN_NUM_BUSES 1
+define HAL_CAN_NUM_BUSES 2
 
 # CAN bus interface names (Linux network interfaces)
-define HAL_CAN_BUS0_DEVICE "vcan0"
+define HAL_CAN_BUS0_DEVICE "can0"
+define HAL_CAN_BUS1_DEVICE "can1"
 
 # Disable IMU, inertial sensors, barometers, compasses
 define HAL_INS_DEFAULT HAL_INS_NONE
 define INS_ENABLE_MASK 0
 define AP_INERTIAL_SENSOR_NONE 1
 define HAL_BARO_ALLOW_INIT_NO_BARO 1
-define HAL_COMPASS_NONE 1
 
 # Enable RC input on Jetson UART1 (ttyTHS0 = 40-pin header J11)
 define HAL_RC_INPUT_TYPE RC_SERIAL
