@@ -2,11 +2,10 @@
 define HAL_CAN_ENABLE 1
 
 # Number of CAN buses
-define HAL_CAN_NUM_BUSES 2
+define HAL_CAN_NUM_BUSES 1
 
 # CAN bus interface names (Linux network interfaces)
 define HAL_CAN_BUS0_DEVICE "can0"
-define HAL_CAN_BUS1_DEVICE "can1"
 
 # Disable IMU, inertial sensors, barometers, compasses
 define HAL_INS_DEFAULT HAL_INS_NONE
